@@ -166,3 +166,4 @@ export const SecurityArchitecture: React.FC = () => {
     </div>
   );
 };
+
