@@ -14,7 +14,7 @@
     "dev:backend": "npm --workspace=backend run dev",
     "dev:frontend": "npm --workspace=frontend run dev",
     "dev": "node scripts/dev.js",
-    "build": "npm --workspace=backend run build && npm --workspace=frontend run build",
+    "build": "npm --workspace=backend run build && npm --workspace=frontend run build && node -e \"const fs = require('fs'); fs.cpSync('frontend/dist', 'dist', { recursive: true });\"",
     "start": "npm --workspace=backend run start",
     "test": "npm --workspace=backend run test"
   },
