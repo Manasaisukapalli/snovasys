@@ -78,5 +78,72 @@ export class AuditController {
       res.status(500).json({ error: 'Ledger verification failed', details: err.message });
     }
   }
+
+  /**
+   * Interactive Sandbox: Deliberately alter an entry in the database to test tamper detection.
+   */
+  static async simulateTamper(req: Request, res: Response): Promise<void> {
+    try {
+      const targetEntry = await prisma.ledgerEntry.findFirst({
+        orderBy: { entryNumber: 'asc' }
+      });
+
+      if (!targetEntry) {
+        res.status(400).json({ error: 'No ledger entries exist to tamper with.' });
+        return;
+      }
+
+      // Save original amount in SystemConfig so it can be restored
+      await prisma.systemConfig.upsert({
+        where: { key: 'ORIGINAL_ENTRY_1_AMOUNT' },
+        update: { value: targetEntry.amount.toString() },
+        create: { key: 'ORIGINAL_ENTRY_1_AMOUNT', value: targetEntry.amount.toString() }
+      });
+
+      // Illegitimately mutate the record
+      await prisma.ledgerEntry.update({
+        where: { id: targetEntry.id },
+        data: { amount: targetEntry.amount + 777777.0 }
+      });
+
+      res.json({
+        message: `Tampering simulated! Entry #${targetEntry.entryNumber} amount was maliciously altered in DB.`,
+        tamperedEntryNumber: targetEntry.entryNumber
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Tamper simulation failed', details: err.message });
+    }
+  }
+
+  /**
+   * Restore ledger to legitimate state after tamper testing.
+   */
+  static async repairLedger(req: Request, res: Response): Promise<void> {
+    try {
+      const original = await prisma.systemConfig.findUnique({
+        where: { key: 'ORIGINAL_ENTRY_1_AMOUNT' }
+      });
+
+      const originalAmount = original ? parseFloat(original.value) : 50000.0;
+
+      const targetEntry = await prisma.ledgerEntry.findFirst({
+        orderBy: { entryNumber: 'asc' }
+      });
+
+      if (targetEntry) {
+        await prisma.ledgerEntry.update({
+          where: { id: targetEntry.id },
+          data: { amount: originalAmount }
+        });
+      }
+
+      res.json({
+        message: 'Ledger state mathematically restored and verified.',
+        restoredAmount: originalAmount
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'Repair failed', details: err.message });
+    }
+  }
 }
 

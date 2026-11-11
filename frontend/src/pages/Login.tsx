@@ -39,8 +39,8 @@ export const Login: React.FC<LoginProps> = ({ onSuccess, onNavigateRegister, onN
   };
 
   return (
-    <div style={{ maxWidth: 440, margin: '60px auto', padding: '0 20px' }}>
-      <div className="card">
+    <div className="animate-slide-up" style={{ maxWidth: 440, margin: '60px auto', padding: '0 20px' }}>
+      <div className="card card-interactive">
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div style={{
             width: 48,

@@ -7,6 +7,9 @@ import { AdminBootstrap } from './pages/AdminBootstrap.js';
 import { Dashboard } from './pages/Dashboard.js';
 import { TransferPage } from './pages/TransferModal.js';
 import { LedgerProof } from './pages/LedgerProof.js';
+import { TamperSandbox } from './pages/TamperSandbox.js';
+import { Analytics } from './pages/Analytics.js';
+import { SecurityArchitecture } from './pages/SecurityArchitecture.js';
 import { AdminUsers } from './pages/AdminUsers.js';
 import { AdminAuditLogs } from './pages/AdminAuditLogs.js';
 
@@ -32,7 +35,7 @@ function MainApp() {
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar currentTab={currentTab} setCurrentTab={setCurrentTab} />
 
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, paddingBottom: 40 }}>
         {!user ? (
           <>
             {currentTab === 'register' && (
@@ -75,6 +78,18 @@ function MainApp() {
               <LedgerProof />
             )}
 
+            {currentTab === 'tamper-sandbox' && (
+              <TamperSandbox />
+            )}
+
+            {currentTab === 'analytics' && (
+              <Analytics />
+            )}
+
+            {currentTab === 'security-arch' && (
+              <SecurityArchitecture />
+            )}
+
             {currentTab === 'admin-users' && (
               <AdminUsers />
             )}
@@ -88,13 +103,23 @@ function MainApp() {
 
       <footer style={{
         borderTop: '1px solid var(--border)',
-        padding: '16px 20px',
+        padding: '20px',
         textAlign: 'center',
-        fontSize: '0.78rem',
+        fontSize: '0.8rem',
         color: 'var(--text-muted)',
-        backgroundColor: 'rgba(17, 24, 39, 0.5)'
+        backgroundColor: 'rgba(7, 10, 18, 0.7)',
+        backdropFilter: 'blur(8px)'
       }}>
-        BalanceVault © 2026 — Snovasys Fresher Hiring Challenge 2026 Submission. Built with Node.js, Express, Prisma, and React.
+        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+          <div>
+            <strong>BalanceVault</strong> © 2026 — Snovasys Fresher Hiring Challenge 2026.
+          </div>
+          <div style={{ display: 'flex', gap: 16 }}>
+            <span style={{ color: '#34d399' }}>● Ledger: SHA-256 Chained</span>
+            <span style={{ color: '#38bdf8' }}>● RBAC: Server-Enforced</span>
+            <span style={{ color: '#c084fc' }}>● Proof: Zero-Trust</span>
+          </div>
+        </div>
       </footer>
     </div>
   );
@@ -107,4 +132,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-

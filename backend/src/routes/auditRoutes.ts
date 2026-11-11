@@ -5,9 +5,11 @@ import { requireRole } from '../middleware/rbac.js';
 
 const router = Router();
 
-// Ledger verification can be public or operator-accessible to support "a ledger you can prove"!
+// Ledger verification and interactive tamper testing endpoints
 router.get('/ledger/verify', AuditController.verifyLedger);
 router.get('/ledger/entries', AuditController.getLedgerEntries);
+router.post('/ledger/simulate-tamper', AuditController.simulateTamper);
+router.post('/ledger/repair', AuditController.repairLedger);
 
 // Audit logs restricted to ADMIN and OPERATOR
 router.get('/logs', authenticate, requireRole('ADMIN', 'OPERATOR'), AuditController.getAuditLogs);

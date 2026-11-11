@@ -52,7 +52,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateTransfer, onNavi
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: '30px auto', padding: '0 20px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: 1100, margin: '30px auto', padding: '0 20px' }}>
       {/* Top Banner for Onboarding KYC Status */}
       {user && user.status === 'PENDING' && (
         <div style={{
@@ -80,9 +80,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateTransfer, onNavi
       {/* Account Balance & Stat Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20, marginBottom: 28 }}>
         {/* Balance Card */}
-        <div className="card" style={{
-          background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-          border: '1px solid #334155',
+        <div className="card card-hologram card-interactive" style={{
+          padding: 24,
           position: 'relative',
           overflow: 'hidden'
         }}>
@@ -300,6 +299,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigateTransfer, onNavi
                   required
                   style={{ width: '100%' }}
                 />
+                <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                  {['1000', '5000', '10000', '50000'].map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setDepositAmount(amt)}
+                      style={{
+                        backgroundColor: '#1f2937',
+                        border: '1px solid var(--border)',
+                        color: '#60a5fa',
+                        fontSize: '0.74rem',
+                        padding: '4px 8px',
+                        borderRadius: 6
+                      }}
+                    >
+                      +₹{parseInt(amt).toLocaleString()}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>

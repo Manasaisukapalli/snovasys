@@ -40,8 +40,8 @@ export const Register: React.FC<RegisterProps> = ({ onSuccess, onNavigateLogin }
   };
 
   return (
-    <div style={{ maxWidth: 460, margin: '50px auto', padding: '0 20px' }}>
-      <div className="card">
+    <div className="animate-slide-up" style={{ maxWidth: 460, margin: '50px auto', padding: '0 20px' }}>
+      <div className="card card-interactive">
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div style={{
             width: 48,

@@ -46,8 +46,8 @@ export const TransferPage: React.FC<TransferPageProps> = ({ onSuccess, onCancel 
   };
 
   return (
-    <div style={{ maxWidth: 520, margin: '40px auto', padding: '0 20px' }}>
-      <div className="card">
+    <div className="animate-slide-up" style={{ maxWidth: 520, margin: '40px auto', padding: '0 20px' }}>
+      <div className="card card-interactive">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
           <div style={{
             backgroundColor: 'rgba(37, 99, 235, 0.15)',

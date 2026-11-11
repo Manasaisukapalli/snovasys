@@ -55,6 +55,8 @@ export const api = {
   // Ledger & Audit
   verifyLedger: () => apiRequest('/audit/ledger/verify'),
   getLedgerEntries: (limit = 50) => apiRequest(`/audit/ledger/entries?limit=${limit}`),
+  simulateTamper: () => apiRequest('/audit/ledger/simulate-tamper', { method: 'POST' }),
+  repairLedger: () => apiRequest('/audit/ledger/repair', { method: 'POST' }),
   getAuditLogs: (params: any = {}) => {
     const qs = new URLSearchParams(params).toString();
     return apiRequest(`/audit/logs${qs ? `?${qs}` : ''}`);

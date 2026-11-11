@@ -38,7 +38,7 @@ export const LedgerProof: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ maxWidth: 1100, margin: '30px auto', padding: '0 20px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: 1100, margin: '30px auto', padding: '0 20px' }}>
       {/* Title Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>

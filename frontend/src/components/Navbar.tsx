@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext.js';
-import { Shield, Database, Users, History, Send, LogOut, CheckCircle2 } from 'lucide-react';
+import { Shield, Database, Users, History, Send, LogOut, CheckCircle2, BarChart2, Bug, Lock } from 'lucide-react';
 
 interface NavbarProps {
   currentTab: string;
@@ -10,22 +10,49 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => {
   const { user, logout } = useAuth();
 
+  const navItem = (id: string, label: string, icon: React.ReactNode) => {
+    const isActive = currentTab === id;
+    return (
+      <button
+        onClick={() => setCurrentTab(id)}
+        style={{
+          backgroundColor: isActive ? 'rgba(59, 130, 246, 0.2)' : 'transparent',
+          color: isActive ? '#60a5fa' : 'var(--text-muted)',
+          borderBottom: isActive ? '2px solid #3b82f6' : '2px solid transparent',
+          borderRadius: 0,
+          padding: '10px 12px',
+          fontSize: '0.84rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          fontWeight: isActive ? 600 : 500,
+          transition: 'all 0.2s ease'
+        }}
+      >
+        {icon}
+        <span>{label}</span>
+      </button>
+    );
+  };
+
   return (
     <header style={{
       borderBottom: '1px solid var(--border)',
-      backgroundColor: 'rgba(17, 24, 39, 0.95)',
-      backdropFilter: 'blur(8px)',
+      backgroundColor: 'rgba(7, 10, 18, 0.85)',
+      backdropFilter: 'blur(16px)',
       position: 'sticky',
       top: 0,
       zIndex: 40
     }}>
       <div style={{
-        maxWidth: 1200,
+        maxWidth: 1280,
         margin: '0 auto',
-        padding: '12px 20px',
+        padding: '8px 20px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 12
       }}>
         {/* Brand */}
         <div
@@ -33,107 +60,46 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}
         >
           <div style={{
-            background: 'linear-gradient(135deg, #2563eb, #3b82f6)',
+            background: 'linear-gradient(135deg, #2563eb, #8b5cf6)',
             padding: 8,
             borderRadius: 10,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#fff'
+            color: '#fff',
+            boxShadow: '0 0 15px rgba(59, 130, 246, 0.4)'
           }}>
             <Shield size={22} />
           </div>
           <div>
-            <div style={{ fontWeight: 800, fontSize: '1.2rem', letterSpacing: '-0.02em', color: '#fff' }}>
-              Balance<span style={{ color: '#3b82f6' }}>Vault</span>
+            <div style={{ fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', color: '#fff' }}>
+              Balance<span style={{ color: '#38bdf8' }}>Vault</span>
             </div>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', lineHeight: 1 }}>
-              Provable Ledger Platform
+            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span className="pulse-indicator" />
+              <span>Verifiable Ledger</span>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
         {user && (
-          <nav style={{ display: 'flex', gap: 6 }}>
-            <button
-              onClick={() => setCurrentTab('dashboard')}
-              style={{
-                backgroundColor: currentTab === 'dashboard' ? 'var(--primary)' : 'transparent',
-                color: currentTab === 'dashboard' ? '#fff' : 'var(--text-muted)',
-                padding: '8px 14px',
-                fontSize: '0.88rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6
-              }}
-            >
-              <Database size={16} /> Overview
-            </button>
+          <nav style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+            {navItem('dashboard', 'Overview', <Database size={15} />)}
 
             {user.role === 'ACCOUNT_HOLDER' && (
-              <button
-                onClick={() => setCurrentTab('transfer')}
-                style={{
-                  backgroundColor: currentTab === 'transfer' ? 'var(--primary)' : 'transparent',
-                  color: currentTab === 'transfer' ? '#fff' : 'var(--text-muted)',
-                  padding: '8px 14px',
-                  fontSize: '0.88rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6
-                }}
-              >
-                <Send size={16} /> Transfer Money
-              </button>
+              navItem('transfer', 'Transfer', <Send size={15} />)
             )}
 
-            <button
-              onClick={() => setCurrentTab('ledger-proof')}
-              style={{
-                backgroundColor: currentTab === 'ledger-proof' ? 'var(--primary)' : 'transparent',
-                color: currentTab === 'ledger-proof' ? '#fff' : 'var(--text-muted)',
-                padding: '8px 14px',
-                fontSize: '0.88rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6
-              }}
-            >
-              <CheckCircle2 size={16} color="#34d399" /> Ledger Proof
-            </button>
+            {navItem('ledger-proof', 'Ledger Proof', <CheckCircle2 size={15} color="#34d399" />)}
+            {navItem('tamper-sandbox', 'Tamper Sandbox', <Bug size={15} color="#f87171" />)}
+            {navItem('analytics', 'Analytics', <BarChart2 size={15} color="#38bdf8" />)}
+            {navItem('security-arch', 'Security & RBAC', <Lock size={15} color="#c084fc" />)}
 
             {(user.role === 'ADMIN' || user.role === 'OPERATOR') && (
               <>
-                <button
-                  onClick={() => setCurrentTab('admin-users')}
-                  style={{
-                    backgroundColor: currentTab === 'admin-users' ? 'var(--primary)' : 'transparent',
-                    color: currentTab === 'admin-users' ? '#fff' : 'var(--text-muted)',
-                    padding: '8px 14px',
-                    fontSize: '0.88rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6
-                  }}
-                >
-                  <Users size={16} /> User Management
-                </button>
-
-                <button
-                  onClick={() => setCurrentTab('audit-logs')}
-                  style={{
-                    backgroundColor: currentTab === 'audit-logs' ? 'var(--primary)' : 'transparent',
-                    color: currentTab === 'audit-logs' ? '#fff' : 'var(--text-muted)',
-                    padding: '8px 14px',
-                    fontSize: '0.88rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6
-                  }}
-                >
-                  <History size={16} /> Audit Trail
-                </button>
+                {navItem('admin-users', 'Users', <Users size={15} />)}
+                {navItem('audit-logs', 'Audit Trail', <History size={15} />)}
               </>
             )}
           </nav>
@@ -156,18 +122,19 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
             <button
               onClick={logout}
               style={{
-                backgroundColor: '#1f2937',
-                border: '1px solid var(--border)',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.25)',
                 color: '#f87171',
-                padding: '8px 12px',
+                padding: '7px 12px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                fontSize: '0.82rem'
+                fontSize: '0.8rem',
+                borderRadius: 8
               }}
               title="Logout"
             >
-              <LogOut size={16} /> Logout
+              <LogOut size={15} /> Logout
             </button>
           </div>
         ) : (
@@ -175,14 +142,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
             <button
               onClick={() => setCurrentTab('login')}
               className="btn-secondary"
-              style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+              style={{ fontSize: '0.84rem', padding: '7px 16px' }}
             >
               Login
             </button>
             <button
               onClick={() => setCurrentTab('register')}
               className="btn-primary"
-              style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+              style={{ fontSize: '0.84rem', padding: '7px 16px' }}
             >
               Create Account
             </button>
@@ -192,4 +159,3 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, setCurrentTab }) => 
     </header>
   );
 };
-
